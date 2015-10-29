@@ -9,3 +9,15 @@ class GreetingRestController {
         return new Greeting(name);
     }
 }
+
+class Greeting {
+    private final name
+
+    public Greeting(name) {
+        this.name = name
+    }
+
+    public String getMessage() {
+        return "Hello, $name!!"
+    }
+}

@@ -1,0 +1,48 @@
+package buttle7.sandbox
+
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.services.dynamodbv2.*
+import com.amazonaws.services.dynamodbv2.datamodeling.*
+
+import org.springframework.web.bind.annotation.*
+
+/**
+ * スコアを扱うRestController
+ */
+@RestController
+@RequestMapping("/score")
+class ScoreRestController {
+    private static AmazonDynamoDBClient client = new AmazonDynamoDBClient(
+            new ProfileCredentialsProvider()
+    )
+    private static DynamoDBMapper mapper = new DynamoDBMapper(client)
+
+    static {
+        client.setEndpoint("http://localhost:8000");
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public int save(@RequestBody Score score) {
+        mapper.save(score);
+        return mapper.load(Score, score.userId).sum{it.total};
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Score> list(@RequestParam(value="user") String userId) {
+        return mapper.load(Score, userId);
+    }
+
+
+}
+
+@DynamoDBTable(tableName = "Score")
+class Score {
+    @DynamoDBHashKey
+    String userId
+    @DynamoDBRangeKey
+    Date timestamp
+    @DynamoDBAttribute
+    int length
+    @DynamoDBAttribute
+    int total
+}
