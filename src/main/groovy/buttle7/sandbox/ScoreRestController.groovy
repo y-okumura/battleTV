@@ -23,13 +23,16 @@ class ScoreRestController {
 
     @RequestMapping(method = RequestMethod.POST)
     public int save(@RequestBody Score score) {
+println score
         mapper.save(score);
-        return mapper.load(Score, score.userId).sum{it.total};
+        return list(score.userId).sum{it.total}
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Score> list(@RequestParam(value="user") String userId) {
-        return mapper.load(Score, userId);
+        return mapper.query(Score.class, new DynamoDBQueryExpression<Score>()
+            .withHashKeyValues(new Score(userId: userId))
+        )
     }
 
 
@@ -37,7 +40,7 @@ class ScoreRestController {
 
 @DynamoDBTable(tableName = "Score")
 class Score {
-    @DynamoDBHashKey
+    @DynamoDBHashKey(attributeName ="user_id")
     String userId
     @DynamoDBRangeKey
     Date timestamp
