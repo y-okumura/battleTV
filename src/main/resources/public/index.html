@@ -4,6 +4,12 @@
         <meta charset="utf-8" />
     </head>
     <body>
-        hello!!
+        <form action="/score" method="post">
+            <label for="userId"></label><input name="userId"><br>
+            <label for="timestamp"></label><input type="datetime" name="timestamp"><br>
+            <label for="length"></label><input type="number" name="length"><br>
+            <label for="total"></label><input type="number" name="total">
+            <button type="button">送信</button>
+        </form>
     </body>
 </html>
