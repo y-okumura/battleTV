@@ -1,5 +1,7 @@
 package buttle7.sandbox
 
+import groovy.transform.*
+
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.dynamodbv2.*
 import com.amazonaws.services.dynamodbv2.datamodeling.*
@@ -22,8 +24,7 @@ class ScoreRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public int save(@RequestBody Score score) {
-println score
+    public int save(@ModelAttribute Score score) {
         mapper.save(score);
         return list(score.userId).sum{it.total}
     }
@@ -39,6 +40,7 @@ println score
 }
 
 @DynamoDBTable(tableName = "Score")
+@ToString
 class Score {
     @DynamoDBHashKey(attributeName ="user_id")
     String userId
