@@ -51,7 +51,7 @@ println score
 
     @RequestMapping("/ranking")
     public List<User>ranking() {
-        mapper.scan(User, new DynamoDBScanExpression().withLimit(10))
+        new ArrayList<>(mapper.scan(User, new DynamoDBScanExpression().withLimit(10))).sort{-it.score}
     }
 
 }
