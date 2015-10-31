@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script>//<![CDATA[
+    $(function() {
+        $("form").submit(function(event) {
+            var form = $(this)
+            $.ajax({
+                url:this.action,
+                method:'POST',
+                data: form.serialize()
+            }).done(function(response) {
+                $("#out").text(response)
+            })
+            return false;
+        })
+    })
+    //]]></script>
+</head>
+<body>
+    <pre id="out"></pre>
+    <form id="credentialsForm" action="/setup/credentials" method="post">
+            <textarea name="content"></textarea>
+            <button type="submit">送信</button>
+    </form>
+    <form action="/setup/db/cleanup"><button type="submit">テーブル削除</button></form>
+    <form action="/setup/db/init"><button type="submit">テーブル作成</button></form>
+</body>
+</html>
