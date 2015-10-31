@@ -35,8 +35,6 @@ println score
             .withHashKeyValues(new Score(userId: userId))
         )
     }
-
-
 }
 
 @DynamoDBTable(tableName = "Score")
