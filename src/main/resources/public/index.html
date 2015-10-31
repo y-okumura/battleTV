@@ -11,9 +11,10 @@
                         method: 'POST',
                         url: "/score",
                         data: form.serialize(),
+                        // まだ足りないみたい
 //                        data: JSON.stringify(form.serializeArray().reduce((function(l, x){l[x.name] = x.value; return l;}), {})),
-                        dataType:'json',
-                        contentType: "application/json"
+//                        contentType: "application/json",
+                        dataType:'json'
                     }).done(function(response) {
                         $("#out").text(response)
                     })
