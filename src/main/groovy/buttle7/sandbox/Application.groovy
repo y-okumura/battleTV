@@ -3,6 +3,7 @@ package buttle7.sandbox
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
+import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import groovy.transform.CompileStatic
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -39,6 +40,11 @@ public class Application extends SpringBootServletInitializer {
     @Bean
     public DynamoDBMapper getDynamoDBMapper(AmazonDynamoDBClient client) {
         new DynamoDBMapper(amazonDynamoDBClient)
+    }
+
+    @Bean
+    public DynamoDB getDynamoDB(AmazonDynamoDBClient client) {
+        new DynamoDB(client)
     }
 
     public static void main(String[] args) {

@@ -1,5 +1,8 @@
 package buttle7.sandbox
 
+import com.amazonaws.services.dynamodbv2.document.DynamoDB
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import groovy.transform.*
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
@@ -16,10 +19,32 @@ import org.springframework.web.bind.annotation.*
 class ScoreRestController {
 
     private final DynamoDBMapper mapper
+    private final DynamoDB dynamoDB
+
+    @RequestMapping("/cleanup")
+    public String cleanup() {
+        dynamoDB.getTable("Score").delete()
+        return "success"
+    }
+
+
+    @RequestMapping("/init")
+    public String init() {
+        CreateTableRequest request = mapper.generateCreateTableRequest(Score)
+            .withProvisionedThroughput(
+                new ProvisionedThroughput()
+                    .withReadCapacityUnits(5L)
+                    .withWriteCapacityUnits(6L)
+            )
+
+        dynamoDB.createTable(request).waitForActive()
+        return "success"
+    }
 
     @Autowired
-    public ScoreRestController(DynamoDBMapper mapper) {
+    public ScoreRestController(DynamoDBMapper mapper, DynamoDB dynamoDB) {
         this.mapper = mapper
+        this.dynamoDB = dynamoDB
     }
 
     @RequestMapping(method = RequestMethod.POST)
