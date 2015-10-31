@@ -28,7 +28,10 @@ public class Application extends SpringBootServletInitializer {
     @Bean
     public AmazonDynamoDBClient getAmazonDynamoDBClient() {
         def client = new AmazonDynamoDBClient(new ProfileCredentialsProvider())
-        client.setEndpoint(endpoint)
+
+        if (!endpoint.isEmpty()) {
+            client.setEndpoint(endpoint)
+        }
 
         return client
     }

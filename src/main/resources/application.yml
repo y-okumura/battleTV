@@ -1,0 +1,5 @@
+endpoint: ""
+---
+spring:
+    profiles: dev
+endpoint: "http://localhost:8000"

@@ -34,3 +34,7 @@ task console(dependsOn: 'classes', type: JavaExec) {
     main = 'groovy.ui.Console'
     classpath = sourceSets.test.runtimeClasspath
 }
+
+bootRun {
+    jvmArgs '-Dspring.profiles.active=dev'
+}
