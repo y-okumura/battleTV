@@ -1,6 +1,7 @@
 package buttle7.sandbox
 
 import buttle7.sandbox.model.Score
+import buttle7.sandbox.model.User
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
@@ -16,36 +17,29 @@ import org.springframework.web.bind.annotation.*
 class ScoreRestController {
 
     private final DynamoDBMapper mapper
-    private final DynamoDB dynamoDB
-
-    @RequestMapping("/cleanup")
-    public String cleanup() {
-        dynamoDB.getTable("Score").delete()
-        return "success"
-    }
-
-    @RequestMapping("/init")
-    public String init() {
-        CreateTableRequest request = mapper.generateCreateTableRequest(Score)
-            .withProvisionedThroughput(
-                new ProvisionedThroughput()
-                    .withReadCapacityUnits(5L)
-                    .withWriteCapacityUnits(6L)
-            )
-        dynamoDB.createTable(request).waitForActive()
-        return "success"
-    }
 
     @Autowired
-    public ScoreRestController(DynamoDBMapper mapper, DynamoDB dynamoDB) {
+    public ScoreRestController(DynamoDBMapper mapper) {
         this.mapper = mapper
-        this.dynamoDB = dynamoDB
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public int save(@ModelAttribute Score score) {
+println score
         mapper.save(score);
-        return list(score.userId).sum{it.total}
+
+        def user = getUser(score.userId).addScore(score)
+        mapper.save(user)
+        return user.score
+    }
+
+    private User getUser(String userId) {
+        User user = new User(userId:userId)
+        if (mapper.count(User, new DynamoDBQueryExpression<User>().withHashKeyValues(user)) > 0) {
+            return mapper.load(User, userId)
+        } else {
+            return user
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -54,5 +48,10 @@ class ScoreRestController {
             .withHashKeyValues(new Score(userId: userId))
         )
     }
-}
 
+    @RequestMapping("/ranking")
+    public List<User>ranking() {
+        mapper.scan(User, new DynamoDBScanExpression().withLimit(10))
+    }
+
+}

@@ -1,8 +1,10 @@
 package buttle7.sandbox
 
 import buttle7.sandbox.model.Score
+import buttle7.sandbox.model.User
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
+import com.amazonaws.services.dynamodbv2.model.DeleteTableResult
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -44,9 +46,19 @@ class DBSetupController {
 
     @RequestMapping("/cleanup")
     public String cleanup() {
-        dynamoDB.getTable("Score").delete()
-        dynamoDB.getTable("User").delete()
+        deleteScore()
+        deleteUser()
         return "success"
+    }
+
+    @RequestMapping("/deleteScore")
+    public DeleteTableResult deleteScore() {
+        dynamoDB.getTable("Score").delete()
+    }
+
+    @RequestMapping("/deleteUser")
+    public DeleteTableResult deleteUser() {
+        dynamoDB.getTable("User").delete()
     }
 
     @RequestMapping("/init")

@@ -12,7 +12,7 @@ import groovy.transform.ToString
 @DynamoDBTable(tableName = "Score")
 @ToString
 class Score {
-    @DynamoDBHashKey(attributeName = "user_id")
+    @DynamoDBHashKey
     String userId
     @DynamoDBRangeKey
     long timestamp
