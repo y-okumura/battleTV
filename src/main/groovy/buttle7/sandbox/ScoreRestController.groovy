@@ -5,7 +5,7 @@ import groovy.transform.*
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.dynamodbv2.*
 import com.amazonaws.services.dynamodbv2.datamodeling.*
-
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 /**
@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/score")
 class ScoreRestController {
-    private static AmazonDynamoDBClient client = new AmazonDynamoDBClient(
-            new ProfileCredentialsProvider()
-    )
-    private static DynamoDBMapper mapper = new DynamoDBMapper(client)
 
-    static {
-        client.setEndpoint("http://localhost:8000");
+    private final DynamoDBMapper mapper
+
+    @Autowired
+    public ScoreRestController(DynamoDBMapper mapper) {
+        this.mapper = mapper
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public int save(@ModelAttribute Score score) {
+println score
         mapper.save(score);
         return list(score.userId).sum{it.total}
     }
