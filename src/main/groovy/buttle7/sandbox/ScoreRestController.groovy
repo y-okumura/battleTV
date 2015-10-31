@@ -68,7 +68,7 @@ class Score {
     @DynamoDBHashKey(attributeName ="user_id")
     String userId
     @DynamoDBRangeKey
-    Date timestamp
+    long timestamp
     @DynamoDBAttribute
     int length
     @DynamoDBAttribute
