@@ -1,6 +1,8 @@
 package buttle7.sandbox
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.regions.Region
+import com.amazonaws.regions.Regions
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
@@ -29,11 +31,10 @@ public class Application extends SpringBootServletInitializer {
     @Bean
     public AmazonDynamoDBClient getAmazonDynamoDBClient() {
         def client = new AmazonDynamoDBClient(new ProfileCredentialsProvider())
-
         if (!endpoint.isEmpty()) {
             client.setEndpoint(endpoint)
         }
-
+        client.setRegion(Region.getRegion(Regions.AP_NORTHEAST_1));
         return client
     }
 

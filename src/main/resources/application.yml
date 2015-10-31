@@ -1,5 +1,9 @@
 endpoint: ""
+credentials:
+  dir: "/usr/share/tomcat8/.aws/"
 ---
 spring:
     profiles: dev
 endpoint: "http://localhost:8000"
+credentials:
+  dir: "build/tmp"

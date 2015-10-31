@@ -27,7 +27,6 @@ class ScoreRestController {
         return "success"
     }
 
-
     @RequestMapping("/init")
     public String init() {
         CreateTableRequest request = mapper.generateCreateTableRequest(Score)
@@ -36,7 +35,6 @@ class ScoreRestController {
                     .withReadCapacityUnits(5L)
                     .withWriteCapacityUnits(6L)
             )
-
         dynamoDB.createTable(request).waitForActive()
         return "success"
     }
@@ -49,7 +47,6 @@ class ScoreRestController {
 
     @RequestMapping(method = RequestMethod.POST)
     public int save(@ModelAttribute Score score) {
-println score
         mapper.save(score);
         return list(score.userId).sum{it.total}
     }
