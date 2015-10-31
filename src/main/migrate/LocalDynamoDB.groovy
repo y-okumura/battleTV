@@ -7,8 +7,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*
 import buttle7.sandbox.*
 
 def client = new AmazonDynamoDBClient(new ProfileCredentialsProvider());
-client.setEndpoint("http://localhost:8000"); 
-DynamoDB dynamoDB = new DynamoDB(client);
+client.setEndpoint("http://localhost:8000");
+DynamoDBSettings dynamoDB = new DynamoDBSettings(client);
 
 dynamoDB.getTable("Score").delete()
 
