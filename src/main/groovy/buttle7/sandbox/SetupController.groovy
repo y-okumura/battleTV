@@ -30,7 +30,7 @@ class SetupController {
 }
 
 @RestController
-@RequestMapping("/setup/db")
+@RequestMapping("/dbsetup")
 class DBSetupController {
 
     private final DynamoDBMapper mapper
