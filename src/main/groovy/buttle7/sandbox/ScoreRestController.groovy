@@ -1,12 +1,9 @@
 package buttle7.sandbox
 
+import buttle7.sandbox.model.Score
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
-import groovy.transform.*
-
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.services.dynamodbv2.*
 import com.amazonaws.services.dynamodbv2.datamodeling.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -59,15 +56,3 @@ class ScoreRestController {
     }
 }
 
-@DynamoDBTable(tableName = "Score")
-@ToString
-class Score {
-    @DynamoDBHashKey(attributeName ="user_id")
-    String userId
-    @DynamoDBRangeKey
-    long timestamp
-    @DynamoDBAttribute
-    int length
-    @DynamoDBAttribute
-    int total
-}

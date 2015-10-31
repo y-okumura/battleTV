@@ -1,5 +1,6 @@
 package buttle7.sandbox
 
+import buttle7.sandbox.model.Score
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest
