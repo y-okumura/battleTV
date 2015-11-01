@@ -14,12 +14,12 @@
         ).done(function( data, textStatus, jqXHR ) {
             var ranking = $('#ranking')
             var top = 0
-            index.empty()
+            ranking.empty()
             $.each(data, function(i, user) {
                 if (top == 0) {
                     top = user.score
                 }
-                var row = $("<div class='row'>").appendTo(index)
+                var row = $("<div class='row'>").appendTo(ranking)
                 $('<div class="col-sm-1"></div>').appendTo(row).text(user.userId)
                 $('<div class="progress-bar" role="progressbar">123</div>').appendTo(
                         $('<div class="progress"></div>').appendTo(row)
