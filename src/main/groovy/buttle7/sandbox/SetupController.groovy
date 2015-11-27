@@ -1,8 +1,10 @@
 package buttle7.sandbox
 
+import buttle7.sandbox.model.Score
+import buttle7.sandbox.model.User
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest
+import com.amazonaws.services.dynamodbv2.model.DeleteTableResult
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -44,19 +46,35 @@ class DBSetupController {
 
     @RequestMapping("/cleanup")
     public String cleanup() {
-        dynamoDB.getTable("Score").delete()
+        deleteScore()
+        deleteUser()
         return "success"
+    }
+
+    @RequestMapping("/deleteScore")
+    public DeleteTableResult deleteScore() {
+        dynamoDB.getTable("Score").delete()
+    }
+
+    @RequestMapping("/deleteUser")
+    public DeleteTableResult deleteUser() {
+        dynamoDB.getTable("User").delete()
     }
 
     @RequestMapping("/init")
     public String init() {
-        CreateTableRequest request = mapper.generateCreateTableRequest(Score)
+        dynamoDB.createTable(mapper.generateCreateTableRequest(Score)
                 .withProvisionedThroughput(
                 new ProvisionedThroughput()
                         .withReadCapacityUnits(5L)
                         .withWriteCapacityUnits(6L)
-        )
-        dynamoDB.createTable(request).waitForActive()
+        )).waitForActive()
+        dynamoDB.createTable(mapper.generateCreateTableRequest(User)
+                .withProvisionedThroughput(
+                new ProvisionedThroughput()
+                        .withReadCapacityUnits(5L)
+                        .withWriteCapacityUnits(5L)
+        )).waitForActive()
         return "success"
     }
 }

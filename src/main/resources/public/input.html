@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script>//<![CDATA[
+            $(function() {
+                $('#scoreForm').submit(function(event) {
+                    var form = $(this)
+                    $.ajax({
+                        method: 'POST',
+                        url: "/score",
+                        data: form.serialize(),
+                        // まだ足りないみたい
+//                        data: JSON.stringify(form.serializeArray().reduce((function(l, x){l[x.name] = x.value; return l;}), {})),
+//                        contentType: "application/json",
+                        dataType:'json'
+                    }).done(function(response) {
+                        $("#out").text(response)
+                    })
+                    return false;
+                })
+            })
+        //]]></script>
+    </head>
+    <body>
+        <form id="scoreForm" action="/score" method="post">
+            <label for="userId"></label><input name="userId"><br>
+            <label for="timestamp"></label><input type="datetime" name="timestamp"><br>
+            <label for="length"></label><input type="number" name="length"><br>
+            <label for="total"></label><input type="number" name="total">
+            <button type="submit">送信</button>
+        </form>
+        <pre id="out"></pre>
+    </body>
+</html>
